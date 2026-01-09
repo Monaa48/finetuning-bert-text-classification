@@ -33,4 +33,3 @@ This repository contains an end-to-end pipeline to fine-tune a BERT-family encod
 ## Identification
 - ANOM NUR MAULID - 1103223193 - TK4601
 - DARRELL CHESTA ADABI - 1103223128 - TK4601
-(Repository is public. Group members contribute via fork + PR.)

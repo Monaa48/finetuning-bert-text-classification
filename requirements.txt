@@ -1,0 +1,15 @@
+transformers
+datasets
+evaluate
+accelerate
+torch
+scikit-learn
+numpy
+pandas
+
+# Untuk Task 2 & 3
+sentencepiece
+
+# Untuk Task 3 (Phi-2 LoRA 4-bit)
+peft
+bitsandbytes

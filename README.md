@@ -1,27 +1,39 @@
-# Fine-tuning BERT for Text Classification (AG News)
+# Fine-tuning BERT for Text Classification — Task 1 (AG News + GoEmotions)
 
 ## Overview
-This repository contains an end-to-end pipeline to fine-tune a **BERT-family encoder** model for **4-class news topic classification** using the **AG News** dataset from HuggingFace Datasets.
+This repository contains end-to-end pipelines to fine-tune a **BERT-family encoder** model for:
+1) **Multi-class text classification** (AG News), and
+2) **Multi-label emotion classification** (GoEmotions)
 
-**Task:** Encoder (BERT-family) — Text Classification (AG News)
+The workflow covers preprocessing, tokenization, fine-tuning, and evaluation.
 
-## Dataset
-- HuggingFace Datasets: `sh0416/ag_news`
-- Input text: `title` + `description` (merged into a single `text` field)
+> Note: **MNLI (NLI)** is submitted in a separate repository `finetuning-bert-nli` (as required by the assignment).
+
+---
+
+## Datasets
+
+### 1) AG News (Multi-class)
+- Dataset: `sh0416/ag_news`
+- Input: `title + description` (merged into a single `text` field)
 - Labels: normalized to **0–3** (to match `num_labels=4`)
 
-### Data sizes used (Full Run)
-- Train: 108000
-- Validation: 12000
-- Test: 7600
+### 2) GoEmotions (Multi-label)
+- Dataset: `google-research-datasets/go_emotions` (config: `raw`)
+- Input: `text`
+- Labels: multi-label (converted to multi-hot vectors inside the notebook)
+
+---
 
 ## Model
-- Checkpoint: `bert-base-uncased`
-- Head: `AutoModelForSequenceClassification`
-- Objective: 4-class classification
+- Base checkpoint: `bert-base-uncased`
+- Framework: HuggingFace Transformers + Datasets
 
-## Training Setup
-- Max length: 128
+---
+
+## Training Setup (default)
+(Used as the base configuration in the notebooks; adjust if needed)
+- Max length: 128 (AG News), 128 (GoEmotions)
 - Epochs: 3
 - Learning rate: 2e-5
 - Train batch size: 16
@@ -30,54 +42,62 @@ This repository contains an end-to-end pipeline to fine-tune a **BERT-family enc
 - Seed: 42
 - Mixed precision: fp16 (if CUDA available)
 
-## Results (Full Run)
+---
+
+## Results
+
+### AG News — Full Run
+**Data sizes**
+- Train: 108000
+- Validation: 12000
+- Test: 7600
+
 | Split | Loss | Accuracy | Macro-F1 |
 |------|------|----------|----------|
 | Validation | 0.1883 | 0.9485 | 0.9483 |
 | Test | 0.1965 | 0.9455 | 0.9455 |
 
+### GoEmotions — Full Run
+**Data sizes**
+- Train: 168980
+- Validation: 21122
+- Test: 21123
+
+| Split | Loss | Micro-F1 | Macro-F1 | Micro-Precision | Micro-Recall |
+|------|------|----------|----------|-----------------|--------------|
+| Validation | 0.1105 | 0.3760 | 0.2867 | 0.5948 | 0.2749 |
+| Test | 0.1109 | 0.3771 | 0.2846 | 0.5989 | 0.2752 |
+
+
+---
+
 ## Repository Structure
 Minimum required structure:
-- `notebooks/` : training and evaluation notebooks
-- `reports/`   : experiment results and analysis
-- `requirements.txt` : dependencies
+- `README.md`
+- `notebooks/`
+- `reports/`
+- `requirements.txt`
 
 (Optional)
-- `models/` : saved best model checkpoints
-- `outputs/` : training logs / checkpoints
+- `models/`
+- `outputs/`
+
+---
 
 ## Notebooks
-- `notebooks/02_finetune_bert_ag_news.ipynb`  
-  Fine-tuning + evaluation on AG News.
+- `notebooks/02_finetune_bert_ag_news_fullrun_drive.ipynb`  
+  Fine-tuning + evaluation for AG News (full run).
+- `notebooks/02_finetune_bert_go_emotions_fullrun_drive_v2.ipynb`  
+  Fine-tuning + evaluation for GoEmotions (multi-label).  
+  (v2 includes robust label-column detection.)
 
-(If you use the Drive-based notebook, you can still keep it under `notebooks/` for submission.)
+---
 
-## How to Run
+## How to Run (Google Colab + Drive workflow)
+Mount Google Drive and set the project directory:
 
-### Option A — Google Colab (Drive workflow)
-If your notebook is set up to save outputs into Google Drive:
 ```python
 from google.colab import drive
 drive.mount('/content/drive')
 
 PROJECT_DIR = "/content/drive/MyDrive/finetuning-bert-text-classification"
-```
-Then run the notebook cells top-to-bottom.
-
-### Option B — Local
-1. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
-2. Open and run the notebook:
-```bash
-jupyter notebook
-```
-
-## Notes / Common Issues
-- If you hit `CUDA error: device-side assert triggered`, it is usually caused by **label out-of-range**. Ensure labels are **0..3** for `num_labels=4`.
-- If you previously hit a CUDA assert in Colab, **Restart runtime** before re-running training.
-
-## Identification
-- ANOM NUR MAULID — 1103223193 — TK4601 — GitHub: https://github.com/Monaa48
-- DARRELL CHESTA ADABI — 1103223128 — TK4601 — GitHub: https://github.com/chessstaaa

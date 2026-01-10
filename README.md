@@ -85,11 +85,10 @@ Minimum required structure:
 ---
 
 ## Notebooks
-- `notebooks/02_finetune_bert_ag_news_fullrun_drive.ipynb`  
-  Fine-tuning + evaluation for AG News (full run).
-- `notebooks/02_finetune_bert_go_emotions_fullrun_drive_v2.ipynb`  
-  Fine-tuning + evaluation for GoEmotions (multi-label).  
-  (v2 includes robust label-column detection.)
+- `notebooks/finetune_bert_ag_news.ipynb`  
+  Fine-tuning + evaluation for AG News.
+- `notebooks/finetune_bert_go_emotions.ipynb`  
+  Fine-tuning + evaluation for GoEmotions.
 
 ---
 
